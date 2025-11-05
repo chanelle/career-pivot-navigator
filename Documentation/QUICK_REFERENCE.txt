@@ -1,0 +1,233 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                  🔥 CAREER PIVOT NAVIGATOR - QUICK REFERENCE 🔥              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 FILE STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+career_pivot_navigator/
+│
+├── 📍 CORE LOGIC (LangChain)
+│   ├── main.py                  → CLI + Streamlit entry point
+│   ├── analyze.py               → CareerPivotAnalyzer class
+│   ├── plan_generator.py        → 3-step plans + exports
+│   ├── prompts.py               → 8 specialized LLM prompts
+│   └── utils.py                 → 12+ helper functions
+│
+├── 📊 DATA & CONFIG
+│   ├── career_map.json          → 8 careers + skill mappings
+│   └── requirements.txt         → Dependencies
+│
+└── 📚 DOCUMENTATION
+    ├── README.md                → Full overview + philosophy
+    ├── SETUP.md                 → Installation + troubleshooting
+    ├── CODEX_GUIDE.md           → 8 layers of development prompts
+    ├── examples.py              → 7 usage examples
+    └── PROJECT_SUMMARY.md       → Complete summary
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 QUICK START (5 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Install dependencies
+   $ pip install -r requirements.txt
+
+2. Set your OpenAI API key
+   $ export OPENAI_API_KEY="sk-your-key-here"
+
+3. Run the CLI (default)
+   $ python main.py
+
+   OR run the web app
+   $ python main.py streamlit
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 CORE FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ SKILL + PAIN INTAKE
+   Input: Current role, skills, pain points, interests, constraints
+
+✅ LANGCHAIN ANALYSIS  
+   LLM analyzes + matches to 8 career paths with explanations
+
+✅ 3-STEP EXIT PLAN
+   Concrete steps, timelines, resources, success metrics
+
+✅ BONUS OUTPUTS
+   - Monetization strategy (earn while pivoting)
+   - Resume reframe (industry-specific language)
+   - Mindset coaching (honest motivation)
+
+✅ MULTIPLE EXPORTS
+   - Markdown (shareable, printable)
+   - JSON (programmatic)
+   - Notion (easy import)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💼 8 AVAILABLE CAREERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ID                      | Career Title              | Salary Range
+────────────────────────────────────────────────────────────────────
+ux_researcher           | UX Researcher             | $65K - $120K
+tech_support_specialist | Tech Support Specialist   | $45K - $75K
+content_writer          | Content Writer            | $40K - $100K
+customer_success_manager| Customer Success Manager  | $55K - $95K
+mental_health_advocate  | Mental Health Advocate     | $35K - $65K
+product_strategist      | Product Strategist        | $80K - $150K
+freelance_consultant    | Freelance Consultant      | $50K - $200K
+community_builder       | Community Manager         | $45K - $85K
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔌 PROGRAMMING USAGE (Copy-Paste Ready)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+from analyze import CareerPivotAnalyzer
+from plan_generator import PivotPlanGenerator
+
+analyzer = CareerPivotAnalyzer()
+planner = PivotPlanGenerator()
+
+user_data = {
+    "name": "You",
+    "current_role": "Customer Service",
+    "skills": "communication, empathy, CRM",
+    "hates": "angry customers, low pay",
+    "interests": "tech, mental health",
+    "constraints": "low budget, chronic pain",
+}
+
+# Get recommendations
+result = analyzer.analyze_pivot(user_data)
+print(result["analysis"])
+
+# Get detailed plan
+for career in result["matched_careers"]:
+    plan = planner.generate_3_step_plan(user_data, career["id"])
+    print(plan["plan_text"])
+
+# Export
+planner.export_full_plan(user_data, result["analysis"], plan, format="markdown")
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 CUSTOMIZATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ADD NEW CAREER
+→ Edit career_map.json, add entry with:
+  - id, title, required_skills, salary_range, remote, freelance_viable,
+    entry_path, resources, trend_relevance
+
+CHANGE TONE
+→ Edit prompts.py, modify CAREER_PIVOT_SYSTEM_PROMPT or specific templates
+
+EXTEND ANALYZER
+→ Subclass CareerPivotAnalyzer in analyze.py, add custom methods
+
+ADD NEW EXPORT FORMAT
+→ Edit plan_generator.py, add format case in export_full_plan()
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 DEPLOYMENT OPTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STREAMLIT CLOUD (Free, 3 min)
+$ git push
+→ Connect Streamlit Cloud
+→ Set OPENAI_API_KEY secret
+→ Live at yourname.streamlit.app
+
+FASTAPI BACKEND (Scalable)
+$ pip install fastapi uvicorn
+→ Create api.py with FastAPI routes
+→ uvicorn api:app --reload
+→ Deploy to Render/Railway/AWS
+
+LOCAL (Development)
+$ python main.py        # CLI mode
+$ python main.py streamlit  # Web mode
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚙️  ADVANCED (VS CODE CODEX)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use CODEX_GUIDE.md for 8 layers of development:
+
+Layer 1: Architecture & Setup
+Layer 2: LLM Chain Enhancements
+Layer 3: User Experience
+Layer 4: Data & Insights
+Layer 5: Monetization & Deployment
+Layer 6: Accessibility & Equity
+Layer 7: Testing & Validation
+Layer 8: Scaling & Performance
+
+Each layer has copy-paste-ready prompts for VS Code Codex.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🐛 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ModuleNotFoundError: No module named 'langchain'
+→ pip install -r requirements.txt
+
+OpenAI API key not found
+→ Check .env file, verify OPENAI_API_KEY is set
+→ export OPENAI_API_KEY="sk-..."
+
+Streamlit not found
+→ pip install streamlit
+
+Connection timeout
+→ Check internet connection
+→ Check OpenAI API status: https://status.openai.com/
+
+See SETUP.md for more troubleshooting.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 DOCUMENTATION GUIDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+First time?              → Start with SETUP.md
+Full overview?           → Read README.md
+Want code examples?      → See examples.py
+Advanced development?    → Use CODEX_GUIDE.md
+Complete summary?        → Check PROJECT_SUMMARY.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 KEY VALUES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Neurodivergent-affirming
+✅ Acknowledges systemic barriers (ableism, racism, sexism, classism)
+✅ Anti-hustle-culture
+✅ Data-driven & realistic
+✅ Prioritizes free/low-cost options
+✅ Recognizes lived experience as superpower
+✅ Small wins celebrated
+✅ Community-driven
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 SUCCESS METRICS (After Launch)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Track:
+- Number of analyses run
+- Top 3 pivot careers chosen
+- User satisfaction (recommendations helpful?)
+- Export format preferences
+- Feedback & iterations
+- Outcomes (did people actually pivot?)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔥 Remember: You don't need permission to pivot. You need a plan.
+
+This tool helps people build exits from broken systems.
+That's the mission. That's the 🔥.
+
+Get started now. Change lives. 💪
+
+═══════════════════════════════════════════════════════════════════════════════
