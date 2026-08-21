@@ -1,223 +1,195 @@
-# 🔥 Career Pivot Navigator
+# Career Pivot Navigator
 
-> **For neurodivergent, marginalized, and burnt-out professionals who know the system is broken—and are building exits.**
+**An AI-assisted career exploration prototype for neurodivergent, marginalized, and burnt-out professionals who need concrete options, not motivational fog.**
 
-AI-powered career pivot analysis using LangChain and GPT-4. Get realistic career recommendations, concrete action plans, and monetization strategies based on your skills, pain points, and interests.
+Career Pivot Navigator combines a small, structured career dataset with an OpenAI language model to translate a person's skills, constraints, pain points, and interests into plausible pivot directions and a three-step exploration plan. It is designed as decision support, not an automated career authority.
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![LangChain](https://img.shields.io/badge/LangChain-🦜-green.svg)](https://github.com/langchain-ai/langchain)
-[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-orange.svg)](https://openai.com/)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
+[![LangChain](https://img.shields.io/badge/LangChain-0.1%2B-1C3C3C.svg)](https://python.langchain.com/)
+[![OpenAI](https://img.shields.io/badge/default_model-gpt--4o-412991.svg)](https://platform.openai.com/docs/models)
 
----
+![Career Pivot Navigator architecture](career_pivot_architecture.png)
 
-## 🎯 What It Does
+## Problem
 
-Career Pivot Navigator helps people escape misaligned jobs by:
-- 🧠 Analyzing your skills, pain points, and interests using AI
-- 💼 Matching you to 1-3 realistic career pivots (with salary ranges)
-- 🪜 Generating concrete 3-step action plans with timelines
-- 💰 Providing monetization strategies for transitioning
-- 📥 Exporting personalized plans in Markdown/JSON
+Most career tools flatten a complicated transition into job-title matching or generic encouragement. That is particularly weak for people balancing disability, burnout, limited money, caregiving, identity-based barriers, or the need to keep earning during a pivot.
 
-**Philosophy**: Realistic exits over toxic positivity. Tactical steps over vague inspiration.
+The product question was: **How might a career tool turn messy lived constraints into a small set of inspectable options and realistic first moves?**
 
----
+## Approach
 
-## ✨ Features
+The navigator uses two complementary layers:
 
-- **AI-Powered Analysis**: LangChain + GPT-4 for intelligent career mapping
-- **8 Career Paths**: UX Researcher, Product Strategist, Content Writer, Data Analyst, and more
-- **3-Step Action Plans**: Concrete, low-barrier steps with free/low-cost resources
-- **Dual Interface**: CLI for quick use, Streamlit web app for demos
-- **Export Options**: Save plans as Markdown or JSON
-- **Neurodivergent-Affirming**: Recognizes different work styles as strengths
-- **Accessibility-First**: Designed for disabilities and constraints
+1. **Deterministic matching** compares user-entered skills and pain points with eight curated career profiles.
+2. **LLM synthesis** uses that structured context to explain fit, tradeoffs, and next steps in plain language.
 
----
+Users can run the flow in a terminal or through a Streamlit interface. Plans can be exported as Markdown or JSON for later editing.
 
-## 🚀 Quick Start
+## Key Decisions
+
+- **Constraints are first-class input.** Budget, time, remote preference, and other limits shape the plan instead of appearing as an afterthought.
+- **The career map grounds the model.** Recommendations begin with a local JSON dataset rather than unconstrained title generation.
+- **Three steps, deliberately.** The output favors a short exploration sequence over a sprawling reinvention plan.
+- **Multiple interfaces share one core.** CLI and Streamlit support different access preferences without duplicating the analysis logic.
+- **Human judgment stays in the loop.** The model proposes directions; the user evaluates them against current labor-market evidence and lived reality.
+
+## Architecture
+
+The application loads and normalizes user input, scores potential matches against the local career map, builds context for LangChain prompts, and sends that context to OpenAI. Results are then displayed in the CLI or Streamlit UI and can be exported.
+
+```text
+User input
+   │
+   ▼
+Normalize skills, pain points, interests, and constraints
+   │
+   ├──► Local career map ──► deterministic match signals
+   │
+   ▼
+LangChain prompt composition
+   │
+   ▼
+OpenAI ChatOpenAI (default in code: gpt-4o)
+   │
+   ▼
+Career rationale + three-step plan
+   │
+   ├──► CLI
+   ├──► Streamlit
+   └──► Markdown / JSON export
+```
+
+The diagram above is the existing project architecture asset, now surfaced where reviewers can actually see it instead of making them conduct archaeology.
+
+## Validation
+
+Current evidence is limited to implementation inspection and the repository's setup checker:
+
+- The codebase contains shared analysis, plan-generation, prompt, and export modules.
+- Both main LLM entry points default to `gpt-4o`.
+- The local career map contains eight career profiles used for deterministic matching.
+- `Core Logic/test_setup.py` checks the Python version, required packages, API-key configuration, expected files, and career-map availability.
+
+A clean-environment install, end-to-end model run, structured usability study, and recommendation-quality evaluation are **not yet documented**. This README therefore describes the project as a prototype, not production-ready software.
+
+## Limitations
+
+- Recommendations are generated from user input, a small static career dataset, and an LLM. They can be incomplete, inaccurate, or overly confident.
+- Salary ranges are illustrative fields in the local dataset, not live market data. Verify compensation, qualifications, and demand with current sources.
+- Accessibility intent is present in the product framing, but the Streamlit interface has not been documented against WCAG or tested with assistive-technology users.
+- User-provided career information is sent to the configured OpenAI API. Do not enter confidential employer, client, health, or identity information unless you have assessed that data flow.
+- Output should support research and reflection. It should not replace professional, financial, legal, medical, or employment advice.
+- The default model is specified in code. The optional `MODEL_NAME` example in `.env.example` is not currently read by the application.
+
+## Status
+
+**Prototype / portfolio proof-of-work.** The CLI and Streamlit paths are implemented; public deployment and formal product validation are not documented.
+
+Current presentation pass: issue [#2](https://github.com/chanelle/career-pivot-navigator/issues/2).
+
+Next milestone: verify installation and both interfaces in a clean environment, capture representative UI evidence, and document the results before making stronger readiness or accessibility claims.
+
+## Quick Start
 
 ### Prerequisites
-- Python 3.8+
-- OpenAI API key ([get one here](https://platform.openai.com/api-keys))
 
-### Installation
+- Python 3.8+
+- An [OpenAI API key](https://platform.openai.com/api-keys)
+
+### Install
 
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/career-pivot-navigator.git
+git clone https://github.com/chanelle/career-pivot-navigator.git
 cd career-pivot-navigator
-
-# Install dependencies
-pip install -r "Data and Infrastructure/requirements.txt"
-
-# Set up your API key
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r "Data and Infrastructure/requirements.txt"
 cp .env.example .env
-# Edit .env and add your OpenAI API key
+```
+
+Add your API key to `.env`:
+
+```text
+OPENAI_API_KEY=your-key-here
 ```
 
 ### Run
 
-**CLI Mode:**
+CLI:
+
 ```bash
 cd "Core Logic"
 python main.py
 ```
 
-**Web Interface:**
+Streamlit:
+
 ```bash
 cd "Core Logic"
 python main.py streamlit
 ```
-Then open: http://localhost:8501
 
----
+Then open [http://localhost:8501](http://localhost:8501).
 
-## 📖 Usage Example
+## What It Produces
 
-### CLI Flow
-```
-What's your current role? Customer Service Representative
-Skills: communication, CRM, problem-solving, empathy
-What you hate: angry customers, low pay, repetitive work
-Interests: tech, UX design, psychology
+Given a current role, skills, pain points, interests, budget, time, and constraints, the prototype can produce:
 
-🚀 Analyzing your pivot opportunities...
+- one or two explained career-pivot directions;
+- matched records from the local career map;
+- a three-step exploration plan;
+- transition-time monetization ideas;
+- resume reframing and mindset prompts;
+- Markdown or JSON exports.
 
-💼 TOP CAREER MATCHES
-1. UX Researcher for Tech Companies
-   Salary: $70,000 - $120,000
-   Remote: ✅ Yes
-   
-🪜 YOUR 3-STEP PIVOT PLAN
-Step 1: Take free UX fundamentals course (Google UX Certificate)
-Step 2: Conduct 3 practice user interviews with friends
-Step 3: Build portfolio case study from customer service insights
-```
+The salary and timeline fields are planning prompts, not guarantees.
 
----
+## Project Structure
 
-## 🏗️ Project Structure
-
-```
-career-pivot-nav/
+```text
+career-pivot-navigator/
 ├── Core Logic/
-│   ├── main.py              # Entry point (CLI + Streamlit)
-│   ├── analyze.py           # LangChain career analysis
-│   ├── plan_generator.py    # 3-step plan generation
-│   ├── prompts.py           # LLM prompt templates
-│   └── utils.py             # Helper functions
+│   ├── main.py
+│   ├── analyze.py
+│   ├── plan_generator.py
+│   ├── prompts.py
+│   ├── test_setup.py
+│   └── utils.py
 ├── Data and Infrastructure/
-│   ├── career_map.json      # Career database (8 careers)
-│   └── requirements.txt     # Python dependencies
-└── Documentation/
-    ├── CODEX_GUIDE.md       # Development guide
-    ├── examples.py          # Usage examples
-    └── PROJECT_SUMMARY.md   # Technical details
+│   ├── career_map.json
+│   └── requirements.txt
+├── Documentation/
+├── career_pivot_architecture.png
+├── .env.example
+└── README.md
 ```
 
----
+## Technology
 
-## 🛠️ Tech Stack
+- Python
+- LangChain and `langchain-openai`
+- OpenAI Chat Completions through `ChatOpenAI`
+- Streamlit
+- Pydantic
+- JSON and Markdown export
 
-- **LangChain**: AI orchestration and prompt management
-- **OpenAI GPT-4o**: Career analysis and plan generation
-- **Streamlit**: Web interface
-- **Python 3.8+**: Core language
-- **Pydantic**: Data validation
+## AI Involvement and Human Decisions
 
----
+AI is used at runtime to synthesize career rationales, plans, monetization ideas, resume reframes, and coaching language. The application's structure, prompt intent, career-map schema, constraint model, interaction modes, and decision to keep recommendations advisory are human product decisions.
 
-## 🎨 Customization
+Generated output is intentionally reviewable. A user remains responsible for checking claims, rejecting poor fits, researching current market conditions, and deciding what action, if any, to take.
 
-### Add New Careers
-Edit `Data and Infrastructure/career_map.json`:
-```json
-{
-  "id": "new_career",
-  "title": "Your Career Title",
-  "skills_required": ["skill1", "skill2"],
-  "salary_range": [60000, 100000],
-  "remote": true,
-  "freelance_viable": true
-}
-```
+## Documentation
 
-### Modify Prompts
-Edit `Core Logic/prompts.py` to adjust AI tone and output format.
+- [Quick-start reference](QUICKSTART.md)
+- [Launch guide](LAUNCH_GUIDE.md)
+- [Development guide](Documentation/CODEX_GUIDE.md)
+- [Technical project summary](Documentation/PROJECT_SUMMARY.md)
 
-### Change LLM Settings
-Edit `.env`:
-```
-MODEL_NAME=gpt-4o
-TEMPERATURE=0.7
-```
+## Security
 
----
+Keep `.env` out of version control and inspect `git status` before committing. Treat any career history entered into the tool as data transmitted to the configured model provider.
 
-## 📚 Documentation
+## License
 
-- **[QUICKSTART.md](QUICKSTART.md)** - Quick reference guide
-- **[LAUNCH_GUIDE.md](LAUNCH_GUIDE.md)** - Step-by-step launch instructions
-- **[Documentation/CODEX_GUIDE.md](Documentation/CODEX_GUIDE.md)** - Advanced features & GitHub Copilot workflow
-- **[Documentation/PROJECT_SUMMARY.md](Documentation/PROJECT_SUMMARY.md)** - Full technical summary
-
----
-
-## 🤝 Contributing
-
-This project welcomes contributions! Some ideas:
-- Add more career paths to `career_map.json`
-- Improve prompt templates
-- Add new analysis features
-- Enhance the Streamlit UI
-- Add tests
-
-See [CODEX_GUIDE.md](Documentation/CODEX_GUIDE.md) for development workflow with GitHub Copilot.
-
----
-
-## 🔐 Security Note
-
-**Never commit your `.env` file!** The `.gitignore` protects your API key, but always verify before pushing:
-```bash
-git status  # Make sure .env is not listed
-```
-
----
-
-## 📄 License
-
-MIT License - feel free to use this for personal or commercial projects.
-
----
-
-## 🌟 Why This Exists
-
-This tool was built for people who:
-- Know the system is broken
-- Have disabilities, neurodiversity, or marginalization
-- Are tired of toxic "hustle culture" advice
-- Want realistic exits, not motivation porn
-- Value honesty over inspiration
-
-**You don't need permission to pivot. You need a plan.** 🔥
-
----
-
-## 🙏 Acknowledgments
-
-Built with LangChain, OpenAI, and a deep understanding that career advice should be tactical, not inspirational.
-
----
-
-## 📧 Contact
-
-Questions? Issues? Want to share your pivot story?
-- Open an issue
-- Check existing documentation
-- Use GitHub Discussions
-
----
-
-**Built by someone who gets it. For people who need real exits.** 💪
+[MIT](LICENSE.md)
