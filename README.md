@@ -45,7 +45,7 @@ Career Pivot Navigator helps people escape misaligned jobs by:
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/career-pivot-navigator.git
+git clone https://github.com/chanelle/career-pivot-navigator.git
 cd career-pivot-navigator
 
 # Install dependencies
